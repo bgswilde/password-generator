@@ -1,48 +1,42 @@
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
-var passwordChars = 'abcdefghijklmnopqrstuvwxyz';
+
+// Password criteria variables
+var passwordChars = '';
+var lowerChars = 'abcdefghijklmnopqrstuvwxyz';
 var upperChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 var numbers = '0987654321';
 var symbols = '`~!@#$%^&*()+[];:<>?=-{}|,.';
 
-// declare arrays: upperChars, lowerChars, numbers, symbols
+// Functions for generatePassword function
 
-// generatePassword function (all of this)
+// Function to determine whether or not to add Lowercase letters, then combine the strings for new password character string.
+var includeLowers = function() {
+  var promptLowers = window.prompt("Would you like to include LOWERCASE LETTERS in your password? Type 'y' to inlcude lowercase letters or 'n' to exclude lowercase letters.");
+  promptLowers = promptLowers.toLowerCase();
 
-// passwordLength function:
-/* window.prompt to ask the user how long would you like to make password? (choose a number between 8-128)
-alert to show what they said about lenght "Your password will be + passwordLength + characters long" */
-var lengthPrompt = function() {
-  var passwordLength = window.prompt("How long would you like your password to be? (choose a number between 8-128)"); //how to I make sure they type a number? Ex. 11` can pass through...
-
-  if (passwordLength < 8) {
-    window.alert("Please pick a number between 8-128");
-    return lengthPrompt();
+  if (promptLowers === "y" || promptLowers ==="yes") {
+    window.alert("Your password will include lowercase letters.");
+    passwordChars = passwordChars.concat(lowerChars);
+    console.log(passwordChars);
+    return passwordChars;
   }
 
-  if (passwordLength > 128) {
-    window.alert("Please pick a number between 8-128");
-    return lengthPrompt();
+  if (promptLowers === "n" || promptLowers ==="no") {
+    window.alert("Your password will not include lowercase letters.");
+    console.log(passwordChars);
+    return passwordChars;
   }
 
   else {
-    window.alert("Your password will be " + passwordLength + " characters long.");
+    window.alert("You must make a valid selection!");
+    return includeLowers();
   };
-  
-  console.log(passwordLength);
 }
 
-
-// includeUppers function:
-/* window.prompt to ask the user if they'd like to inlcude uppercase letters. Type Y or N.
-if Y or y, then alert "your password will include some uppercase letters"
-upperChars is true.
-if N or n, then alert "your password will not include uppercase letters"
-upperChars is false.
-else, then alert "please choose a valid option" and return to upperChars() */
-
+// Function to determine whether or not to add Uppercase letters, then combine the strings for new password character string.
 var includeUppers = function() {
-  var promptUppers = window.prompt("Would you like to include UPPERCASE LETTERS? Type 'y' to inlcude uppercase letters or 'n' to exclude uppercase letters.");
+  var promptUppers = window.prompt("Would you like to include UPPERCASE LETTERS in your password? Type 'y' to inlcude uppercase letters or 'n' to exclude uppercase letters.");
   promptUppers = promptUppers.toLowerCase();
 
   if (promptUppers === "y" || promptUppers ==="yes") {
@@ -64,15 +58,7 @@ var includeUppers = function() {
   };
 }
 
-
-// includeNumbers function:
-/* window.prompt to ask the user if they'd like to inlcude numbers. Type Y or N.
-if Y or y, then alert "your password will include some numbers"
-numbers is true.
-if N or n, then alert "your password will not include numbers"
-numbers is false.
-else, then alert "please choose a valid option" and return to numbers() */
-
+// Function to determine whether or not to add Numbers,  and if so combine the numbers string to the passwordChars string which includes lower and possibly uppercase letters.
 var includeNumbers = function() {
   var promptNumbers = window.prompt("Would you like to include NUMBERS? Type 'y' to inlcude numbers or 'n' to exclude numbers.");
   promptNumbers = promptNumbers.toLowerCase();
@@ -96,14 +82,7 @@ var includeNumbers = function() {
   };
 }
 
-// includeSymbols function:
-/* window.prompt to ask the user if they'd like to inlcude numbers. Type Y or N.
-if Y or y, then alert "your password will include some symbols"
-symbols is true.
-if N or n, then alert "your password will not include symbols"
-symbols is false.
-else, then alert "please choose a valid option" and return to symbols() */
-
+// Function to determine whether or not to add symbols, and if so combine the symbols string to the passwordChars string which includes lowercase and possibly uppercase letters and numbers.
 var includeSymbols = function() {
   var promptSymbols = window.prompt("Would you like to include SYMBOLS? Type 'y' to inlcude numbers or 'n' to exclude numbers.");
   promptSymbols = promptSymbols.toLowerCase();
@@ -114,7 +93,6 @@ var includeSymbols = function() {
     console.log(passwordChars);
     return passwordChars;
   }
-
 
   if (promptSymbols === "n" || promptSymbols === "no") {
     window.alert("Your password will not include symbols.");
@@ -128,45 +106,62 @@ var includeSymbols = function() {
   }
 }
 
+// Function for passwordLength. Get input from user as an integer to get determine password length between 8-128
+var lengthPrompt = function() {
+  var passwordLength = window.prompt("How long would you like your password to be? (choose a number between 8-128)"); //how to I make sure they type a number? Ex. 11` can pass through...
 
-//get characters from each choice.
-//when user clicks generate password, prompts show up.
-//after prompts cycle through, math.random with prompt input generated array (or string?) finds as many characters as the length of passwordLength variable.
-//how do I make sure it uses at least one of each?
-//value of function to create the password goes into the field in the middle.
+  if (passwordLength < 8) {
+    window.alert("Please pick a number between 8-128");
+    return lengthPrompt();
+  }
 
-/* To look into:
-When do i need to use preventdefault?
+  if (passwordLength > 128) {
+    window.alert("Please pick a number between 8-128");
+    return lengthPrompt();
+  }
 
-*/
+  else {
+    window.alert("Your password will be " + passwordLength + " characters long.");
+    console.log(passwordLength);
+    return passwordLength;
+  };
+}
+
+
+// generatePassword function, which runs the previously defined functions for password criteria
 var generatePassword = function() {
-  lengthPrompt();
+  // resets the password criteria before prompts
+  passwordChars = "";
+  // password criteria prompt functions
+  includeLowers();
   includeUppers();
   includeNumbers();
   includeSymbols();
-  
-/*  var randomized = "";
-  for (var i = 0; i < lengthPrompt; i++) {
-    randomized = randomized + passwordChars.charAt(Math.floor(math.random() * passwordChars.length));
+  // validates that at least one selection was made, returning back to the prompts if no selections were made.
+  if (passwordChars === "") {
+    window.alert("Your password is blank! Please go back and select some characters to include in your password.")
+    return generatePassword();
   }
-  return randomized;
-    // for loop for (i = 0, i < lengthPrompt, i++)
-} */
+  
+  // for loop to pick out random characters from the passwordChars string at the length determined by the lengthPrompt
+  var passwordLength = lengthPrompt();
+  var pickedChars = "";
+    for (var i = 0; i < passwordLength; i++) {
+      pickedChars = pickedChars + passwordChars.charAt(Math.floor(Math.random() * passwordChars.length));
+    }
+  console.log(pickedChars);
+  return pickedChars;
+}
 
-// get something out of the array. varfirstItem = array
+
 // Write password to the #password input
 function writePassword() {
   var password = generatePassword();
   var passwordText = document.querySelector("#password");
 
   passwordText.value = password;
-
 }
 
 
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
-
-
-//random thoughts
-//passwordLength(Math.random)
